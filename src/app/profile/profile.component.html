@@ -1,0 +1,33 @@
+<p></p>
+<p></p>
+<div class="container-fluid">
+  <div class="card w-50 bg-light text-center">
+    <div class="card-header">
+      <img src="assets/img/user-profile.png" alt="user"
+           class="rounded mx-auto d-block" width="400" height="150">
+      <h1>{{user.nom | uppercase}} {{user.prenom | uppercase}}</h1>
+      <p class="card-title">{{user.roles[0].roleName}}</p>
+    </div>
+    <div class="card-body">
+      <ul class="list-group">
+        <li class="list-group-item">
+          <span class="fa fa-registered" style="margin-left: 1em;"></span>
+          {{user.matricule}}
+        </li>
+        <li class="list-group-item">
+          <span class="fa fa-envelope"></span>
+          {{user.email}}
+        </li>
+        <li class="list-group-item">
+          <span class="fa fa-phone"></span>
+          {{user.telephone}}
+        </li>
+      </ul>
+    </div>
+    <div class="card-footer">
+      <div class="mx-auto" style="width: 100px;">
+        <span class="fa fa-edit"></span>
+      </div>
+    </div>
+  </div>
+</div>

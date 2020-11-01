@@ -1,0 +1,39 @@
+<span></span>
+<p></p>
+<div class="container">
+
+  <div class="row">
+    <div class="col flex-column border-dark" style="margin-left: -5em">
+      <div class="list-group">
+        <button *ngIf="stations" type="button" disabled class="list-group-item list-group-item-action active">
+          <strong>La liste des stations de pompage :</strong>
+        </button>
+      </div>
+      <div *ngIf="stations" class="row row-cols-1 row-cols-md-2" style="margin-top: 1em">
+        <br>
+        <div class="col mb-2"  *ngFor="let s of stations._embedded.stationPompages" >
+          <div class="card border-dark mb-3">
+            <div class="card-header">Station de pompage : <strong>{{s.nom}}</strong></div>
+            <div class="card-body">
+              <fa-icon [icon]="typeIcon"></fa-icon>
+              <span style="margin-left: 1em;">Type : {{s.type}}</span>
+              <br>
+              <fa-icon [icon]="coordinateIcon"></fa-icon>
+              <span style="margin-left: 1em;">Lang : {{s.langitude}} ; Lat : {{s.latitude}}</span>
+              <br>
+              <fa-icon [icon]="powerIcon"></fa-icon>
+              <span style="margin-left: 1em;">Puissance : {{s.puissance.toFixed(3)}} W</span>
+            </div>
+            <div *ngIf="agentMDM" class="card-footer">
+              <div class="mx-auto" style="width: 100px;">
+                <fa-icon data-toggle="modal" data-target="#staticBackdrop"
+                         class="clickable" [icon]="showIcone" (click)="onGetStation(s)" style="margin-left: 1em;"></fa-icon>
+                <fa-icon class="clickable" [icon]="editIcon" (click)="onEditStation(s)" style="margin-left: 1em;"></fa-icon>
+                <fa-icon class="clickable" [icon]="deleteIcon" (click)="onDeleteStation(s)" style="margin-left: 1em;"></fa-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+</div>

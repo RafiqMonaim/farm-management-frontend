@@ -1,0 +1,57 @@
+<span></span>
+<p></p>
+<div class="container">
+
+  <div class="row">
+    <div class="col flex-column" style="margin-left: -5em;margin-bottom: 1em">
+      <ul class="list-group list-group-horizontal" *ngIf="cities">
+        <li class="list-group-item list-group-item-action" >
+          <button class="btn btn-outline-secondary" *ngFor="let c of cities._embedded.villes"
+                  type="button" (click)="OnGetFarms(c)" style="margin-left: 1em">
+            {{c.nom}}
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col flex-column border-dark" style="margin-left: -5em">
+      <div class="list-group">
+        <button *ngIf="farms" type="button" disabled class="list-group-item list-group-item-action active">
+          <strong>La liste des fermes :</strong>
+        </button>
+      </div>
+      <div *ngIf="farms" class="row row-cols-1 row-cols-md-2" style="margin-top: 1em">
+        <br>
+        <div class="col mb-2"  *ngFor="let f of farms._embedded.fermes" >
+          <div class="card border-dark mb-3">
+            <div class="card-header">Ferme : <strong>{{f.name}}</strong></div>
+              <div class="card-body">
+                <fa-icon [icon]="userIcon"></fa-icon>
+                <span style="margin-left: 1em;">Propriétaire : {{f.proprietaire}}</span>
+                <br>
+                <fa-icon [icon]="coordinateIcon"></fa-icon>
+                <span style="margin-left: 1em;">Lang : {{f.langitude}} ; Lat : {{f.latitude}}</span>
+                <br>
+                <fa-icon [icon]="treeIcon"></fa-icon>
+                <span style="margin-left: 1em;">Nbr Arbre : {{f.nbrArbre}}</span>
+                <br>
+                <fa-icon [icon]="squareIcon"></fa-icon>
+                <span style="margin-left: 1em;">Surface : {{f.contenance.toFixed(3)}} Ha</span>
+              </div>
+            <div class="card-footer">
+              <div class="mx-auto" style="width: 100px;">
+                <fa-icon data-toggle="modal" data-target="#staticBackdrop"
+                         class="clickable" [icon]="showIcone" (click)="onGetFarm(f)" style="margin-left: 1em;"></fa-icon>
+                <fa-icon class="clickable" [icon]="editIcon" (click)="onEditFarm(f)" style="margin-left: 1em;"></fa-icon>
+                <fa-icon class="clickable" [icon]="deleteIcon" (click)="onDeleteFarm(f)" style="margin-left: 1em;"></fa-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,112 @@
+
+<nav class="navbar navbar-expand-lg navbar-light" style="margin-left: 1em">
+  <ul class="nav justify-content-start" style="margin-left: -2em;margin-top: -0.6em;margin-bottom: 0.2em">
+    <li class="nav-item">
+      <a class="navbar-brand" href="/">
+        <img src="assets/img/copag-logo.jpg" alt="logo" class="img-fluid">
+      </a>
+    </li>
+  </ul>
+  <ul class="nav  justify-content-center" style="margin-left: 11em">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/home">Home</a>
+    </li>
+    <li *ngIf="admin" class="nav-item">
+      <a class="nav-link" [routerLink]="['./farm']">Fermes</a>
+    </li>
+    <li class="nav-item" style="margin-left: 5em">
+      <div class="form-group align-content-center">
+        <select (change)="onGetSectors($event)" id="inputState" class="form-control" >
+          <option>Choisissez une ferme...</option>
+          <option [value]="f._links.self.href" *ngFor="let f of farms._embedded.fermes" >
+            {{f.reference}}
+          </option>
+        </select>
+      </div>
+    </li>
+    <li class="nav-item align-self-md-auto" style="margin-left: 19em" >
+      <div class="btn-group">
+        <button type="button" class="btn btn-outline-primary">{{role}} : {{user|uppercase}}</button>
+        <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item clickable" [routerLink]="['./profile']" >Profile</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item clickable" (click)="onLogout()">Se déconnecter</a>
+        </div>
+      </div>
+    </li>
+  </ul>
+</nav>
+
+<hr style="margin-top: -1%">
+
+<div class="container-fluid ">
+  <div class="row">
+    <!-- sidebar Menu -->
+    <div class="col-md-4 flex-column mr-auto ">
+      <div class="col-8">
+        <div class="list-group list-group-flush">
+          <div class="list-group-item active text-uppercase nav-item" style="font-size: larger">
+            Irrigation
+          </div>
+          <div class="list-group-item list-group-item-action btn" (click)="onCheckFarm()"
+               [routerLink]="['./apportEau']">
+            <fa-icon [icon]="eauIcon"></fa-icon>
+            <strong style="margin-left: 1em;">Apport en eau</strong>
+          </div>
+          <div class="list-group-item list-group-item-action btn" (click)="onCheckFarm()"
+               [routerLink]="['./testConformite']">
+            <fa-icon class="clickable" [icon]="testWaterIcon"></fa-icon>
+            <strong class="clickable" style="margin-left: 1em;">Test Conformité</strong>
+          </div>
+          <div class="list-group-item active text-uppercase nav-item" style="font-size: large">
+            Data Management
+          </div>
+          <div class="list-group-item list-group-item-action btn" (click)="onCheckFarm()"
+               [routerLink]="['./sector']">
+            <fa-icon class="clickable" [icon]="sectorIcon"></fa-icon>
+            <strong style="margin-left: 1em;">Secteurs</strong>
+          </div>
+          <div class="list-group-item list-group-item-action btn" (click)="onCheckFarm()"
+               [routerLink]="['./station']">
+            <fa-icon [icon]="WaterStationIcon"></fa-icon>
+            <strong style="margin-left: 1em;">Stations pompage</strong>
+          </div>
+          <div class="list-group-item list-group-item-action btn" (click)="onCheckFarm()"
+               [routerLink]="['./parcelle']">
+            <span class="fa fa-dot-circle-o"></span>
+            <strong style="margin-left: 1em;">Parcelles</strong>
+          </div>
+          <div class="list-group-item list-group-item-action btn" (click)="onCheckFarm()"
+               [routerLink]="['./']">
+            <fa-icon [icon]="greffeIcone" class="clickable"></fa-icon>
+            <strong style="margin-left: 1em;">Porte Greffes</strong>
+          </div>
+          <div class="list-group-item list-group-item-action btn" (click)="onCheckFarm()"
+               [routerLink]="['./']">
+            <span class="fa fa-pagelines"></span>
+            <strong style="margin-left: 1em;">Groupe variété</strong>
+          </div>
+          <div class="list-group-item list-group-item-action btn" (click)="onCheckFarm()"
+               [routerLink]="['./']">
+            <span class="fa fa-lemon-o"></span>
+            <strong style="margin-left: 1em;">Variété</strong>
+          </div>
+          <div class="list-group-item list-group-item-action btn" (click)="onCheckFarm()"
+               [routerLink]="['./operateur']">
+            <span class="fa fa-users"></span>
+            <strong style="margin-left: 1em;">Opérateurs</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-8 flex-column">
+      <router-outlet>
+
+      </router-outlet>
+    </div>
+  </div>
+</div>

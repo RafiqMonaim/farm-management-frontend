@@ -1,0 +1,177 @@
+<p></p>
+<p></p>
+<div class="container-lg" >
+  <div class="card" style="margin-left: -5em">
+    <div class="card-header" style="font-size: xx-large">
+      Liste des apports en eau :
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group align-content-center">
+            <select (change)="onSetSector($event)" id="inputState" class="form-control" >
+              <option>Choisissez un secteur...</option>
+              <option [value]="s._links.apportEaus.href" *ngFor="let s of sectors._embedded.secteurs" >
+                {{s.nom}}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group align-content-center">
+            <select (change)="onSetStation($event)" id="inputState2" class="form-control" >
+              <option>Choisissez une station de pompage...</option>
+              <option [value]="p._links.apportEaus.href" *ngFor="let p of stations._embedded.stationPompages" >
+                {{p.nom}}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div *ngIf="technicien" class="col-md-4 ml-auto" style="margin-left: 20em">
+          <button  type="button" class="btn btn-outline-success "
+                   data-toggle="modal" data-target="#exampleModal">+Ajouter</button>
+        </div>
+        <!-- ************ PopOut d'ajout d'une operation ***********-->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ajouter un Apport en Eau</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <form #f="ngForm" (ngSubmit)="onAddApportEaux()">
+                <div class="modal-body">
+                  <div class="form-group">
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputSelectSector">Secteur</label>
+                      </div>
+                      <select (change)="selectedSector($event)"  class="custom-select" id="inputSelectSector">
+                        <option>Choisissez un secteur...</option>
+                        <option [value]="s._links.self.href" *ngFor="let s of sectors._embedded.secteurs" >
+                          {{s.nom}}</option>
+                      </select>
+                    </div>
+                  </div>
+                    <div class="form-group">
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <label class="input-group-text" for="inputSelectStation">Station</label>
+                        </div>
+                        <select (change)="selectedStation($event)"  class="custom-select" id="inputSelectStation">
+                          <option>Choisissez une station de pompage...</option>
+                          <option [value]="p._links.self.href" *ngFor="let p of stations._embedded.stationPompages" >
+                            {{p.nom}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <label class="input-group-text" for="inputDate">Date</label>
+                          <input [(ngModel)]="this.operation.dateOperation" class="form-control"
+                                 type="datetime-local"  id="inputDate" name="dateOperation" required="required" >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group mb-auto">
+                        <div class="input-group-prepend">
+                          <label class="input-group-text" for="inputET0"> ET0 </label>
+                          <input [(ngModel)]="this.operation.et0" class="form-control" min="0"
+                                 type="number" step="any" id="inputET0" name="et0" required="required" >
+                          <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="right"
+                                title="Évapotranspiration de référence (mm/mois)">
+                            <button class="btn btn-secondary disabled" style="pointer-events: none;"
+                                    type="button" disabled><span class="fa fa-question-circle"></span>
+                            </button>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  <div class="form-group">
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputKC"> KC </label>
+                        <input [(ngModel)]="this.operation.kc" class="form-control"
+                               type="number" min="0" step="0.01"  id="inputKC" name="kc" required="required" >
+                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="right"
+                              title="Coefficient cultural">
+                            <button class="btn btn-secondary disabled" style="pointer-events: none;"
+                                    type="button" disabled><span class="fa fa-question-circle"></span>
+                            </button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                  <button (click)="setTimeOperation()" type="button" class="btn btn-primary btn-lg btn-block">
+                    Calculer
+                  </button>
+                  <hr>
+                  <div class="form-group">
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputTime"> Temps d'irrigation </label>
+                        <input readonly class="form-control"
+                               type="number"  id="inputTime" name="durreeIrrigation"
+                               required="required" [value]="operation.dureeIrrigation" >
+                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="right"
+                              title="La durrée et en minutes">
+                            <button class="btn btn-secondary disabled" style="pointer-events: none;"
+                                    type="button" disabled><span class="fa fa-question-circle"></span>
+                            </button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                  <button [disabled]="!f.valid" type="submit" class="btn btn-primary">+Ajouter</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p></p>
+        <div class="table-responsive-xl">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th scope="col"> # </th>
+              <th scope="col"> Date Operation </th>
+              <th scope="col"> KC </th>
+              <th scope="col"> ET0 </th>
+              <th scope="col"> Dureé d'Irrigation </th>
+              <th scope="col">  </th>
+            </tr>
+            </thead>
+            <tbody *ngIf="operations">
+            <tr *ngFor="let g of operations._embedded.apportEaus;let i = index">
+              <td>{{i+1}}</td>
+              <td>{{g.dateOperation | date: 'dd MMMM yyyy hh:mm:ss'}}</td>
+              <td> {{g.kc.toFixed(2)}} </td>
+              <td> {{g.et0.toFixed(2)}} (mm/mois) </td>
+              <td> {{g.dureeIrrigation }} min </td>
+              <td *ngIf="technicien">
+                <fa-icon data-toggle="modal" data-target="#staticBackdrop"
+                         class="clickable" [icon]="showIcone" (click)="onGetApporEau(g)" style="margin-left: 1em;"></fa-icon>
+                <fa-icon class="clickable" [icon]="editIcon" (click)="onEditOperation(g)" style="margin-left: 1em;"></fa-icon>
+                <fa-icon class="clickable" [icon]="deleteIcon" (click)="onDeleteOperation(g)" style="margin-left: 1em;"></fa-icon>
+              </td>
+
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

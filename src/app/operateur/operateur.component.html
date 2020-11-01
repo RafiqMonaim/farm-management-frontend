@@ -1,0 +1,114 @@
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item clickable" role="presentation">
+    <a class="nav-link active" id="home-tab" data-toggle="tab" (click)="onGetOperateurs()"
+       role="tab" aria-controls="home" aria-selected="true">Utilisateurs</a>
+  </li>
+  <li class="nav-item clickable" role="presentation" *ngIf="admin">
+    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" (click)="onGetRegisters()"
+       role="tab" aria-controls="profile" aria-selected="false">Demandes</a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+    <p> </p>
+    <div class="container-md" >
+      <div class="card">
+        <div class="card-header" style="font-size: xx-large">
+          Liste des Opérateurs :
+        </div>
+        <div class="card-body">
+          <div class="card-body">
+            <div>
+              <p></p>
+              <div class="table-responsive">
+                <table class="table table-hover" >
+                  <thead class="thead-light">
+                  <tr>
+                    <th scope="col"> # </th>
+                    <th scope="col"> Nom </th>
+                    <th scope="col">Prénom</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Téléphone</th>
+                    <th scope="col"> Role </th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let o of operateurs" >
+                    <td>{{o.id}}</td>
+                    <td>{{o.nom}}</td>
+                    <td>{{o.prenom}}</td>
+                    <td>{{o.email}}</td>
+                    <td>{{o.telephone}}</td>
+                    <td>{{o.roles[0].roleName}}</td>
+                    <td *ngIf="admin">
+                      <fa-icon class="clickable" [icon]="editIcon" (click)="onEditOperateur(o)" style="margin-left: 1em;"></fa-icon>
+                      <fa-icon class="clickable" [icon]="deleteIcon" (click)="  onDeleteOperateur(o)" style="margin-left: 1em;"></fa-icon>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+      <p> </p>
+      <div class="container-md" >
+        <div class="card">
+          <div class="card-header" style="font-size: xx-large">
+            Liste des demandes d'enregistrement :
+          </div>
+          <div class="card-body">
+            <div class="card-body">
+              <div>
+                <p></p>
+                <div class="table-responsive">
+                  <table class="table table-hover" >
+                    <thead class="thead-light">
+                    <tr>
+                      <th scope="col"> # </th>
+                      <th scope="col"> Nom </th>
+                      <th scope="col">Prénom</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Téléphone</th>
+                      <th scope="col">Matricule</th>
+                      <th scope="col"> Role </th>
+                      <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let r of registers;let i = index" >
+                      <td>{{i+1}}</td>
+                      <td>{{r.nom}}</td>
+                      <td>{{r.prenom}}</td>
+                      <td>{{r.email}}</td>
+                      <td>{{r.telephone}}</td>
+                      <td>{{r.matricule}}</td>
+                      <td>
+                        <form class="form-inline">
+                          <select class="form-control" (change)="setRole($event,r.id)">
+                            <option selected>Choisir un role...</option>
+                            <option value="TECHNICIEN" >TECHNICIEN</option>
+                            <option value="MANAGER" >MANAGER</option>
+                          </select>
+                          <button type="button" class="btn btn-outline-warning" (click)="onActivateAccount()">
+                            Activer
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+

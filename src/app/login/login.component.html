@@ -1,0 +1,130 @@
+
+    <nav class="navbar navbar-light bg-white justify-content-between">
+      <span class="navbar-brand">
+        <img src="../../assets/img/COPAGLOGO1.png" width="60" height="40" class="d-inline-block align-top">
+      </span>
+      <ul class="nav justify-content-end">
+        <li class="nav-item">
+          <a  class="nav-link active" routerLink="">About</a>
+        </li>
+      </ul>
+    </nav>
+    <hr style="margin-top: 0em">
+    <div class="container-fluid">
+      <div class="text-center" data-gr-c-s-loaded="true">
+        <div class="container justify-content-center">
+          <div class="container col-md-4 col-md-2">
+            <p></p>
+            <form #f="ngForm" (ngSubmit)="onLogin(f.value)">
+              <img class="mb-4" src="../../assets/img/COPAGLOGO1.png"  alt="" width="100" height="100">
+              <h1 class="h3 mb-3 font-weight-normal">Connectez-Vous</h1>
+              <fieldset>
+                <div class="form-group alert alert-danger" *ngIf="mode==1">
+                  <p style="color: red;">
+                    <strong>Bad Credentials</strong>
+                    ( Votre email ou mot de passe invalide ! )
+                  </p>
+                </div>
+                <label for="inputUseremail" class="sr-only">Email</label>
+                <input ngModel type="email" name="email" id="inputUseremail" class="form-control" placeholder="Email..." required>
+                <label for="inputPassword" class="sr-only">Mot de passe</label>
+                <input ngModel type="password" name="password" id="inputPassword" class="form-control" placeholder="Mot de passe..."
+                       required autocomplete="current_password">
+                <!--<div class="checkbox mb-3">
+                  <label>
+                    <input type="checkbox" value="remember-me"> s'enregistrer
+                  </label>
+                </div>-->
+                <br>
+                <button class="btn btn-lg btn-primary" type="submit" >Connection</button>
+                <button class="btn btn-lg btn-success " type="button"
+                        data-toggle="modal" data-target="#exampleModal">
+                  Inscription
+                </button>
+                <p class="mt-5 mb-3 text-muted">©2019-2020</p>
+              </fieldset>
+            </form>
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Demande de création du compte</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <form #fr="ngForm" (ngSubmit)="onSendRequest(fr.value)">
+                    <div class="modal-body">
+                      <div class="form-group">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">Nom et prénom</span>
+                          </div>
+                          <input required="required" ngModel id="inputNom" name="nom" type="text"
+                                 aria-label="Nom" class="form-control" placeholder="nom...">
+                          <input required="required" ngModel id="inputPrenom" name="prenom" type="text"
+                                 aria-label="Prénom" class="form-control" placeholder="Prénom...">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">Matricule</span>
+                          </div>
+                          <input required="required" ngModel name="matricule" id="inputMatricule" type="text"
+                                 aria-label="Matricule" class="form-control">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">Téléphone</span>
+                          </div>
+                          <input required="required" ngModel name="telephone" id="inputTel" type="tel"
+                                 aria-label="Telephone" class="form-control" pattern="06[0-9]{8}">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">Email</span>
+                          </div>
+                          <input required="required" ngModel name="email" id="inputEmail" type="email" aria-label="Email"
+                                 class="form-control" placeholder="exemple@copag.ma" pattern="[a-z0-9._%+-]+@copag.ma$" >
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">Mot de passe</span>
+                          </div>
+                          <input required="required" ngModel name="password" id="inputMotpasse" type="password"
+                                 aria-label="Mot de passe" class="form-control"
+                                 name="password" autocomplete="on">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">Confirmer le mot de passe</span>
+                          </div>
+                          <input required="required" ngModel name="repassword" id="inputMotpasse2" type="password"
+                                 aria-label="Mot de passe" class="form-control"
+                                 name="repassword" autocomplete="on">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button [disabled]="!fr.valid" type="submit" class="btn btn-primary btn-lg btn-block">
+                        Envoyer la demande
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+

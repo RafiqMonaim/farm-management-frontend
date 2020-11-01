@@ -1,0 +1,231 @@
+<p></p>
+<p></p>
+<div class="container-lg" >
+  <div class="card" style="margin-left: -5em">
+    <div class="card-header" style="font-size: xx-large">
+      Les tests de conformité :
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group align-content-center">
+            <select (change)="onSetSector($event)" id="inputState" class="form-control" >
+              <option>Choisissez un secteur...</option>
+              <option [value]="s._links.parcelles.href" *ngFor="let s of sectors._embedded.secteurs" >
+                {{s.nom}}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div *ngIf="parcelles" class="col-md-4">
+          <div class="form-group align-content-center">
+            <select (change)="onSetParcelle($event)" id="inputState2" class="form-control" >
+              <option>Choisissez une station de pompage...</option>
+              <option [value]="p._links.testConformites.href" *ngFor="let p of parcelles._embedded.parcelles" >
+                parcelle {{p.numero}}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div *ngIf="technicien" class="col-md-4 ml-auto" style="margin-left: 20em">
+          <button  type="button" class="btn btn-outline-success "
+                   data-toggle="modal" data-target="#exampleModal">+Ajouter</button>
+        </div>
+        <!-- ******************* popout d'ajout du test *******************-->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog  modal-lg ">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ajouter test de conformité :</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <form #f="ngForm" (ngSubmit)="onAddTestConforme()">
+                <div class="modal-body">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputSelectSector">Secteur</label>
+                      </div>
+                      <select (change)="selectedSector($event)"  class="custom-select" id="inputSelectSector">
+                        <option>Choisissez un secteur...</option>
+                        <option [value]="s._links.parcelles.href" *ngFor="let s of sectors._embedded.secteurs" >
+                          {{s.nom}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div *ngIf="parcelles" class="input-group">
+                      <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputSelectParcelle">Parcelle</label>
+                      </div>
+                      <select *ngIf="parcelles"  (change)="selectedParcelle($event)"  class="custom-select" id="inputSelectParcelle">
+                        <option>Choisissez une station de pompage...</option>
+                        <option [value]="p._links.self.href" *ngFor="let p of parcelles._embedded.parcelles">
+                          parcelle {{p.numero}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputDate">Date</label>
+                        <input [(ngModel)]="this.testConf.dateTest"  class="form-control" type="date"  id="inputDate"
+                               name="dateTest" required="required" >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <label for="inputGoutter1"><strong>Goutteurs : </strong></label>
+                  </div>
+                  <div class="form-group">
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <div class="form-inline">
+                          <input name="dose[]" placeholder="dose goutteur 1 ..." min="0" type="number"
+                                 step="0.1" autocomplete="off" class="form-control dose" id="inputGoutter1" >
+                          <button class="btn btn-outline-secondary add-more" type="button" id="b1">
+                            <span class="fa fa-plus-circle"></span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="form-group">
+                    <button type="button" (click)="setDoseGoutteur()" class="btn btn-primary btn-lg btn-block">
+                      Calculer
+                    </button>
+                  </div>
+                  <hr>
+                  <br>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <div class="input-group mb-auto">
+                          <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputDebitMoy"> Débit moyen </label>
+                            <input [(ngModel)]="this.testConf.debitMoy" class="form-control" min="0"
+                                   type="number" step="any" id="inputDebitMoy" name="debitMoy"
+                                   required="required" readonly>
+                            <div class="input-group-append">
+                              <span class="input-group-text">L/h</span>
+                            </div>
+                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="right"
+                                  title=" Le débit moyen des goutteurs (L/h)">
+                                <button class="btn btn-secondary disabled" style="pointer-events: none;"
+                                        type="button" disabled><span class="fa fa-question-circle"></span>
+                                </button>
+                              </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="input-group mb-auto">
+                          <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputDebitMin"> Débit min </label>
+                            <input class="form-control" type="number"
+                                   [(ngModel)]="this.testConf.debitMin" id="inputDebitMin"
+                                   name="debitMin" required="required" readonly >
+                            <div class="input-group-append">
+                              <span class="input-group-text">L/h</span>
+                            </div>
+                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="right"
+                                  title=" Le débit moyen des 25% goutteurs qui ont les débits minimum (L/h)">
+                                <button class="btn btn-secondary disabled" style="pointer-events: none;"
+                                        type="button" disabled><span class="fa fa-question-circle"></span>
+                                </button>
+                              </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="input-group mb-auto">
+                          <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputCU"> CU </label>
+                            <input class="form-control" min="0" type="number" step="any"
+                                   [(ngModel)]="this.testConf.coefficienUniform" id="inputCU"
+                                   name="coefficienUniform" required="required"  readonly>
+                            <div class="input-group-append">
+                              <span class="input-group-text">%</span>
+                            </div>
+                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="right"
+                                  title=" Le coefficient Uniforme (%)">
+                                <button class="btn btn-secondary disabled" style="pointer-events: none;"
+                                        type="button" disabled><span class="fa fa-question-circle"></span>
+                                </button>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6 ml-auto">
+                      <div class="form-group">
+                        <div class="input-group mb-auto">
+                          <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputDescription"> Description </label>
+                            <input class="form-control" type="text" [(ngModel)]="this.testConf.description"
+                                   id="inputDescription" name="description" required="required" readonly >
+                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="right"
+                                  title=" Depend de CU si > 0.9 ou non ">
+                                <button class="btn btn-secondary disabled" style="pointer-events: none;"
+                                        type="button" disabled><span class="fa fa-question-circle"></span>
+                                </button>
+                              </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                  <button [disabled]="!f.valid" type="submit" class="btn btn-primary">+Ajouter</button>
+                </div>
+                <!--******************************************************************************** -->
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p></p>
+        <div class="table-responsive-xl">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th scope="col"> # </th>
+              <th scope="col"> Date Test </th>
+              <th scope="col"> Débit moyen </th>
+              <th scope="col"> Débit Min </th>
+              <th scope="col"> Coéficien Uniforme </th>
+              <th scope="col"> Déscription </th>
+              <th scope="col">  </th>
+            </tr>
+            </thead>
+            <tbody *ngIf="testConformites">
+            <tr *ngFor="let t of testConformites._embedded.testConformites;let i = index">
+              <td> {{i+1}}</td>
+              <td> {{t.dateTest | date: 'dd MMMM yyyy'}}</td>
+              <td> {{t.debitMoy.toFixed(2)}} L/h</td>
+              <td> {{t.debitMin.toFixed(2)}} L/h</td>
+              <td> {{t.coefficienUniform.toFixed(2) }} % </td>
+              <td> {{t.description}}</td>
+              <td *ngIf="technicien">
+                <fa-icon data-toggle="modal" data-target="#staticBackdrop"
+                         class="clickable" [icon]="showIcone" (click)="onGetTest(t)" style="margin-left: 1em;"></fa-icon>
+                <fa-icon class="clickable" [icon]="editIcon" (click)="onEditTest(t)" style="margin-left: 1em;"></fa-icon>
+                <fa-icon class="clickable" [icon]="deleteIcon" (click)="onDeleteTest(t)" style="margin-left: 1em;"></fa-icon>
+              </td>
+
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
